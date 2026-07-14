@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bảng công bố sảnh (TV) - Cục Phát triển DNNN</title>
+<title>Bảng công bố nhiệm vụ - Cục Phát triển DNNN</title>
 <style>
   :root{
     --navy:#1f3864; --navy2:#2e5496; --ink:#1a2233; --muted:#5b6472;
@@ -17,23 +17,16 @@
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%;overflow:hidden}
-  body{font-family:"Times New Roman","Segoe UI",serif;background:var(--bg);color:var(--ink);
-    height:100vh;display:flex;flex-direction:column}
-
-  /* header */
-  header{height:12vh;background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;
-    display:flex;align-items:center;justify-content:space-between;padding:0 2.2vw;gap:2vw}
+  body{font-family:"Times New Roman","Segoe UI",serif;background:var(--bg);color:var(--ink);height:100vh;display:flex;flex-direction:column}
+  header{height:12vh;background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 2.2vw;gap:2vw}
   .hl{display:flex;align-items:center;gap:1.4vw}
-  .emblem{width:7.2vh;height:7.2vh;border-radius:50%;flex:0 0 auto;
-    background:radial-gradient(circle at 50% 38%,#ffd873,#f0b429 62%,#c8901a);
-    border:0.3vh solid rgba(255,255,255,.55);display:flex;align-items:center;justify-content:center;font-size:3.6vh;color:#7a3b00}
+  .emblem{width:9vh;height:9vh;flex:0 0 auto;object-fit:contain}
   .htitle small{display:block;font-size:1.7vh;letter-spacing:.5px;opacity:.9}
   .htitle h1{font-size:3vh;font-weight:700;line-height:1.1;margin-top:.3vh}
   .hr{text-align:right}
   .hr .d{font-size:2.5vh;font-weight:700}
   .hr .a{font-size:1.6vh;opacity:.9;margin-top:.4vh}
-
-  /* stage */
+  .hr .per{font-size:1.55vh;font-weight:700;margin-top:.5vh;display:inline-block;background:rgba(255,255,255,.16);padding:.3vh 1vw;border-radius:1vh}
   .stage{flex:1;position:relative}
   .slide{position:absolute;inset:0;padding:2.2vh 2.2vw 1vh;display:none;flex-direction:column}
   .slide.on{display:flex}
@@ -41,11 +34,8 @@
   .stitle .bar{width:.8vw;height:3vh;border-radius:3px;background:var(--navy)}
   .stitle.prio .bar{background:var(--gold)} .stitle.prio{color:#8a6200}
   .stitle .rt{margin-left:auto;font-size:1.9vh;font-weight:400;color:var(--muted)}
-
-  /* KPI */
   .kpis{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr 1fr;gap:1.2vw}
-  .kpi{background:var(--card);border-radius:1.2vh;padding:1.6vh 1.4vw;box-shadow:0 .5vh 1.6vh rgba(20,30,60,.08);
-    border-top:.7vh solid var(--navy);position:relative}
+  .kpi{background:var(--card);border-radius:1.2vh;padding:1.6vh 1.4vw;box-shadow:0 .5vh 1.6vh rgba(20,30,60,.08);border-top:.7vh solid var(--navy);position:relative}
   .kpi .lab{font-size:1.9vh;color:var(--muted);font-weight:600}
   .kpi .num{font-size:6.6vh;font-weight:800;line-height:1;margin-top:.6vh}
   .kpi .sub{font-size:1.5vh;color:var(--muted);margin-top:.4vh}
@@ -54,14 +44,10 @@
   .kpi.con{border-top-color:var(--con)} .kpi.con .num{color:var(--con-tx)}
   .kpi.sap{border-top-color:var(--sap)} .kpi.sap .num{color:var(--sap-tx)}
   .kpi.qua{border-top-color:var(--qua)} .kpi.qua .num{color:var(--qua-tx)}
-  .ring{--p:0;width:11vh;height:11vh;border-radius:50%;position:absolute;top:1.4vh;right:1vw;
-    background:conic-gradient(var(--done) calc(var(--p)*1%), #e6e9f1 0);display:flex;align-items:center;justify-content:center}
+  .ring{--p:0;width:11vh;height:11vh;border-radius:50%;position:absolute;top:1.4vh;right:1vw;background:conic-gradient(var(--done) calc(var(--p)*1%), #e6e9f1 0);display:flex;align-items:center;justify-content:center}
   .ring::before{content:"";position:absolute;width:8vh;height:8vh;background:#fff;border-radius:50%}
   .ring span{position:relative;font-size:2.5vh;font-weight:800;color:var(--done-tx)}
-
-  /* bars panel */
-  .panel{background:var(--card);border-radius:1.2vh;padding:1.8vh 1.6vw;margin-top:1.6vh;
-    box-shadow:0 .5vh 1.6vh rgba(20,30,60,.08);flex:1;display:flex;flex-direction:column}
+  .panel{background:var(--card);border-radius:1.2vh;padding:1.8vh 1.6vw;margin-top:1.6vh;box-shadow:0 .5vh 1.6vh rgba(20,30,60,.08);flex:1;display:flex;flex-direction:column}
   .panel h3{font-size:2.1vh;color:var(--navy);border-bottom:.25vh solid var(--line);padding-bottom:.8vh;margin-bottom:1.2vh}
   .bwrap{flex:1;display:flex;flex-direction:column;justify-content:space-around}
   .barrow{display:grid;grid-template-columns:16vw 1fr 4vw;align-items:center;gap:1vw}
@@ -76,12 +62,8 @@
   .legend b{display:inline-block;width:1.6vh;height:1.6vh;border-radius:3px;margin-right:.5vw;vertical-align:-.2vh}
   .prio-line{display:flex;gap:1vw;margin-bottom:1.2vh}
   .prio-line span{background:var(--gold-bg);border:1px solid #e2cf92;border-radius:2vh;padding:.5vh 1.2vw;font-size:1.9vh;color:#8a6200;font-weight:700}
-
-  /* detail table */
-  .dtable{flex:1;background:var(--card);border-radius:1.2vh;overflow:hidden;box-shadow:0 .5vh 1.6vh rgba(20,30,60,.08);
-    display:flex;flex-direction:column}
-  .drow{display:grid;grid-template-columns:4vw 1fr 8vw 10vw 12vw 13vw;align-items:center;
-    gap:1vw;padding:0 1.4vw;border-bottom:1px solid var(--line);flex:1}
+  .dtable{flex:1;background:var(--card);border-radius:1.2vh;overflow:hidden;box-shadow:0 .5vh 1.6vh rgba(20,30,60,.08);display:flex;flex-direction:column}
+  .drow{display:grid;grid-template-columns:4vw 1fr 8vw 10vw 12vw 13vw;align-items:center;gap:1vw;padding:0 1.4vw;border-bottom:1px solid var(--line);flex:1}
   .drow.head{background:var(--navy);color:#fff;flex:0 0 6vh;font-weight:700;font-size:1.9vh}
   .drow .c{font-size:2.15vh}
   .drow .stt{font-weight:700;color:var(--muted);text-align:center;font-size:2vh}
@@ -89,170 +71,218 @@
   .drow .ten small{display:block;font-weight:400;font-size:1.5vh;color:var(--muted)}
   .drow .ph{text-align:center;font-weight:700}
   .badge{display:inline-block;font-size:1.5vh;font-weight:800;padding:.4vh .7vw;border-radius:.6vh;color:#fff}
-  .b-TW,.b-CP,.b-TTg{background:var(--gold)} .b-Bo{background:var(--navy2)} .b-PH,.b-DK{background:#8a94a6}
+  .b-TW,.b-QH,.b-TTg,.b-CP{background:var(--gold)} .b-Bo{background:var(--navy2)} .b-PH,.b-PL,.b-Khac{background:#8a94a6}
   .hancell{text-align:center;font-weight:700;font-size:2vh}
-  .stt-badge{text-align:center}
   .stbadge{display:inline-block;font-size:1.8vh;font-weight:800;padding:.5vh .8vw;border-radius:.6vh}
   .st-done{background:var(--done-bg);color:var(--done-tx)} .st-con{background:var(--con-bg);color:var(--con-tx)}
   .st-sap{background:var(--sap-bg);color:var(--sap-tx)} .st-qua{background:var(--qua-bg);color:var(--qua-tx)}
   .drow.r-qua{background:#fdf1f0} .drow.r-sap{background:#fdf7ee}
-
-  /* footer / progress */
-  footer{height:5vh;display:flex;align-items:center;justify-content:space-between;padding:0 2.2vw;
-    background:#e3e7f0;color:var(--muted);font-size:1.6vh}
+  footer{height:5vh;display:flex;align-items:center;justify-content:space-between;padding:0 2.2vw;background:#e3e7f0;color:var(--muted);font-size:1.6vh}
   .dots{display:flex;gap:.7vw;align-items:center}
   .dot{width:1.3vh;height:1.3vh;border-radius:50%;background:#b7c0d0}
   .dot.on{background:var(--navy);transform:scale(1.25)}
   .pbar{position:absolute;left:0;bottom:0;height:.5vh;background:var(--navy2);width:0%}
+  .msg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2vh;color:var(--muted);font-size:2.6vh}
+  .msg .sp{font-size:2vh}
+  .fresh{font-size:1.4vh;opacity:.75}
 </style>
 </head>
 <body>
   <header>
-    <div class="hl">
-      <div class="emblem">★</div>
-      <div class="htitle">
-        <small>BỘ TÀI CHÍNH · CỤC PHÁT TRIỂN DOANH NGHIỆP NHÀ NƯỚC</small>
-        <h1>THEO DÕI TIẾN ĐỘ THỰC HIỆN NHIỆM VỤ CỦA CÁC PHÒNG</h1>
-      </div>
-    </div>
-    <div class="hr"><div class="d" id="hdate">—</div><div class="a" id="hasof">—</div></div>
+    <div class="hl"><img class="emblem" src="logo.png" alt="Bộ Tài chính" onerror="this.style.visibility='hidden'">
+      <div class="htitle"><small>BỘ TÀI CHÍNH · CỤC PHÁT TRIỂN DOANH NGHIỆP NHÀ NƯỚC</small>
+      <h1>THEO DÕI TIẾN ĐỘ THỰC HIỆN NHIỆM VỤ CỦA CÁC PHÒNG</h1></div></div>
+    <div class="hr"><div class="d" id="hdate">—</div><div class="a" id="hasof">—</div><div class="per" id="hper"></div></div>
   </header>
-
-  <div class="stage" id="stage"></div>
-
+  <div class="stage" id="stage"><div class="msg" id="msg">Đang tải dữ liệu…<div class="sp" id="msgsub"></div></div></div>
   <footer>
     <div id="fleft">Bảng công bố tại sảnh · tự động luân phiên trang</div>
     <div class="dots" id="dots"></div>
-    <div id="fright">—</div>
+    <div id="fright"><span class="fresh" id="fresh"></span></div>
   </footer>
   <div class="pbar" id="pbar"></div>
 
 <script>
-const PHONG_TEN={VP:"Văn phòng",CSTH:"P. Chính sách tổng hợp",SXĐM:"P. Sắp xếp đổi mới",
-  "ĐDCSH":"P. Đại diện chủ sở hữu",NV1:"P. Nghiệp vụ 1",NV2:"P. Nghiệp vụ 2",
-  NV3:"P. Nghiệp vụ 3",NV4:"P. Nghiệp vụ 4",NV5:"P. Nghiệp vụ 5"};
+/* ============================================================
+   CẤU HÌNH – chỉ cần sửa vài dòng dưới đây
+   DATA_URL: đường dẫn dữ liệu (CSV hoặc JSON).
+     - Google Sheet: dán link CSV đã "Xuất bản lên web" của trang dữ liệu.
+     - Hoặc để "data.csv" nếu đặt tệp dữ liệu cùng thư mục trên server.
+   ============================================================ */
+const CONFIG = {
+  DATA_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQJqnhtemWlUHjNwK_nDq4jFlB0Ff6FUovZaNGThpM036O6n08Gl-DITB80l9s5rA/pub?gid=1428623228&single=true&output=csv",
+  REFRESH_MINUTES: 5,     // tự đọc lại dữ liệu mỗi 5 phút
+  SLIDE_SECONDS: 15,      // thời gian mỗi trang
+  ROWS_PER_PAGE: 7,       // số nhiệm vụ mỗi trang danh mục
+  REF_DATE: null,          // null = dùng ngày thực; hoặc "2026-07-13" để cố định khi thử
+  PERIOD_MODE: "month",    // "month" = tự hiện Tháng M/YYYY · "quarter" = tự hiện Quý N/YYYY · "custom" = dùng PERIOD_LABEL
+  PERIOD_LABEL: ""         // chỉ dùng khi PERIOD_MODE = "custom", ví dụ "6 tháng đầu năm 2026"
+};
+
+const PHONG_TEN={VP:"Văn phòng",CSTH:"Phòng Chính sách tổng hợp",SXĐM:"Phòng Sắp xếp đổi mới","ĐDCSH":"Phòng Đại diện chủ sở hữu",NV1:"Phòng Nghiệp vụ 1",NV2:"Phòng Nghiệp vụ 2",NV3:"Phòng Nghiệp vụ 3",NV4:"Phòng Nghiệp vụ 4",NV5:"Phòng Nghiệp vụ 5"};
 const PHONG_ORDER=["VP","CSTH","SXĐM","ĐDCSH","NV1","NV2","NV3","NV4","NV5"];
-const NGUON={TW:{ten:"Trung ương",tier:"cao"},CP:{ten:"Chính phủ",tier:"cao"},TTg:{ten:"Thủ tướng",tier:"cao"},
-  Bo:{ten:"Bộ Tài chính",tier:"uutien"},PH:{ten:"Phối hợp",tier:"thuong"},DK:{ten:"Định kỳ/bất thường",tier:"thuong"}};
+const NGUON={TW:{ten:"Trung ương",tier:"cao"},QH:{ten:"Quốc hội",tier:"cao"},TTg:{ten:"Thủ tướng",tier:"cao"},CP:{ten:"Chính phủ",tier:"cao"},Bo:{ten:"Bộ giao",tier:"uutien"},PH:{ten:"Phối hợp",tier:"thuong"},PL:{ten:"Theo QĐ pháp luật",tier:"uutien"},Khac:{ten:"Khác",tier:"thuong"}};
 const TIER_RANK={cao:0,uutien:1,thuong:2};
-
-const TASKS=[
- {ten:"Dự thảo Quyết định thay thế QĐ 22/2021/QĐ-TTg", phong:"CSTH", nguon:"TTg", han:"2026-07-31", tinhtrang:"Đang thực hiện", td:60},
- {ten:"Xây dựng 06 dự thảo Nghị định về cơ chế hoạt động, tài chính DN", phong:"CSTH", nguon:"CP", han:"2026-08-15", tinhtrang:"Đang thực hiện", td:40},
- {ten:"Phương án sắp xếp DN có vốn nhà nước và bộ máy bên trong DN", phong:"SXĐM", nguon:"CP", han:"2026-07-20", tinhtrang:"Đang thực hiện", td:55},
- {ten:"Rà soát, cập nhật triển khai nhiệm vụ tại Nghị quyết 79-NQ/TW", phong:"SXĐM", nguon:"TW", han:"2026-06-12", tinhtrang:"Đã hoàn thành", td:100},
- {ten:"Tổng hợp báo cáo quyết toán cổ phần hóa, trình Bộ", phong:"SXĐM", nguon:"Bo", han:"2026-04-23", tinhtrang:"Đã hoàn thành", td:100},
- {ten:"Báo cáo SXKD & đầu tư DNNN phục vụ điều hành KTVM (gửi Vụ NSNN)", phong:"CSTH", nguon:"DK", han:"2026-07-05", tinhtrang:"Đang thực hiện", td:80},
- {ten:"Phương án triển khai Kế hoạch giám sát (Bộ QP và 05 địa phương)", phong:"CSTH", nguon:"Bo", han:"2026-04-23", tinhtrang:"Đã hoàn thành", td:100},
- {ten:"Tổng hợp ý kiến DN về chuyển giao vốn SCIC tại VNA về BTC", phong:"NV2", nguon:"Bo", han:"2026-07-08", tinhtrang:"Đang thực hiện", td:70},
- {ten:"Đôn đốc DN ban hành Chiến lược PT; giao chỉ tiêu đánh giá DN 2026", phong:"ĐDCSH", nguon:"DK", han:"2026-08-30", tinhtrang:"Đang thực hiện", td:30},
- {ten:"Rà soát, hướng dẫn triển khai nhiệm vụ CQ đại diện CSH còn lại", phong:"ĐDCSH", nguon:"Bo", han:"2026-07-12", tinhtrang:"Đang thực hiện", td:65},
- {ten:"Xây dựng vị trí việc làm theo Nghị định 361/2025/NĐ-CP", phong:"VP", nguon:"CP", han:"2026-06-15", tinhtrang:"Đã hoàn thành", td:100},
- {ten:"Báo cáo tổ chức họp đánh giá chức năng, nhiệm vụ mới các Phòng", phong:"VP", nguon:"Bo", han:"2026-06-15", tinhtrang:"Đã hoàn thành", td:100},
- {ten:"Dự thảo Báo cáo sơ kết CTCT 6 tháng đầu năm; tổ chức Hội nghị sơ kết", phong:"VP", nguon:"DK", han:"2026-07-10", tinhtrang:"Đang thực hiện", td:90},
- {ten:"Xây dựng Bộ tiêu chí KPI công chức theo NĐ 335/2025/NĐ-CP", phong:"VP", nguon:"CP", han:"2026-07-31", tinhtrang:"Đang thực hiện", td:45},
- {ten:"Kiện toàn Ban Chỉ đạo, Tổ giúp việc triển khai NQ 57-NQ/TW", phong:"VP", nguon:"TW", han:"2026-06-30", tinhtrang:"Tạm dừng", td:50},
- {ten:"Đôn đốc DN cập nhật chỉ tiêu trên Hệ thống thông tin báo cáo DN", phong:"NV4", nguon:"PH", han:"2026-08-10", tinhtrang:"Đang thực hiện", td:35},
-];
-
-const REF_DATE=null, SLIDE_MS=15000, PAGE_SIZE=7;
-function today(){const d=REF_DATE?new Date(REF_DATE+"T00:00:00"):new Date();d.setHours(0,0,0,0);return d;}
-function parse(s){const d=new Date(s+"T00:00:00");d.setHours(0,0,0,0);return d;}
-function daysLeft(t){return Math.round((parse(t.han)-today())/86400000);}
-function statusOf(t){if(t.tinhtrang==="Đã hoàn thành")return "done";const dl=daysLeft(t);if(dl<0)return "qua";if(dl<=3)return "sap";return "con";}
-function tierOf(t){return NGUON[t.nguon]?NGUON[t.nguon].tier:"thuong";}
 const LABELS={done:"Đã hoàn thành",con:"Còn hạn",sap:"Sắp đến hạn",qua:"Quá hạn"};
 const STORDER={qua:0,sap:1,con:2,done:3};
+
+function today(){const d=CONFIG.REF_DATE?new Date(CONFIG.REF_DATE+"T00:00:00"):new Date();d.setHours(0,0,0,0);return d;}
+function parseD(s){if(!s)return null;s=(""+s).trim();
+  let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/); if(m)return new Date(+m[1],+m[2]-1,+m[3]);
+  m=s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/); if(m)return new Date(+m[3],+m[2]-1,+m[1]);
+  const d=new Date(s); return isNaN(d)?null:d;}
+function daysLeft(t){const d=t._han; if(!d)return null; const x=Math.round((d-today())/86400000); return x;}
+function statusOf(t){if(t._done)return "done";const dl=daysLeft(t);if(dl===null)return "con";if(dl<0)return "qua";if(dl<=3)return "sap";return "con";}
+function tierOf(t){return NGUON[t.nguon]?NGUON[t.nguon].tier:"thuong";}
 function counts(list){const c={done:0,con:0,sap:0,qua:0};list.forEach(t=>c[statusOf(t)]++);return c;}
 
-const LEGEND=`<span><b style="background:var(--done)"></b>Đã hoàn thành</span>
-  <span><b style="background:var(--con)"></b>Còn hạn</span>
-  <span><b style="background:var(--sap)"></b>Sắp đến hạn</span>
-  <span><b style="background:var(--qua)"></b>Quá hạn</span>
-  <span><span class="fire" style="color:var(--gold)">★</span> phòng có nhiệm vụ ưu tiên cao</span>`;
+function normNguon(s){s=(""+(s||"")).trim();
+  if(/^TW\b/i.test(s)||/Trung ương/i.test(s))return "TW";
+  if(/^QH\b/i.test(s)||/Quốc hội/i.test(s))return "QH";
+  if(/^TTg\b/i.test(s)||/Thủ tướng/i.test(s))return "TTg";   // kiểm tra trước "Chính phủ"
+  if(/^CP\b/i.test(s)||/Chính phủ/i.test(s))return "CP";
+  if(/^Bo\b/i.test(s)||/Bộ giao|Nhiệm vụ Bộ|Bộ Tài chính/i.test(s))return "Bo";
+  if(/^PH\b/i.test(s)||/Phối hợp/i.test(s))return "PH";
+  if(/^PL\b|^DK\b/i.test(s)||/pháp luật|quy định|Định kỳ|bất thường/i.test(s))return "PL";
+  return "Khac";}
+function normPhong(s){s=(""+(s||"")).trim().toUpperCase().replace(/\./g,"");
+  const map={VP:"VP",CSTH:"CSTH","SXĐM":"SXĐM",SXDM:"SXĐM","ĐDCSH":"ĐDCSH",DDCSH:"ĐDCSH",NV1:"NV1",NV2:"NV2",NV3:"NV3",NV4:"NV4",NV5:"NV5"};
+  return map[s]||s;}
 
+/* ---- CSV parser (hỗ trợ dấu phẩy trong ô, ô có ngoặc kép) ---- */
+function parseCSV(text){
+  text=text.replace(/^﻿/,"").replace(/\r\n/g,"\n").replace(/\r/g,"\n");
+  const rows=[];let row=[],f="",q=false;
+  for(let i=0;i<text.length;i++){const c=text[i];
+    if(q){ if(c==='"'){ if(text[i+1]==='"'){f+='"';i++;}else q=false;} else f+=c; }
+    else{ if(c==='"')q=true; else if(c===","){row.push(f);f="";} else if(c==="\n"){row.push(f);rows.push(row);row=[];f="";} else f+=c; }
+  }
+  if(f!==""||row.length){row.push(f);rows.push(row);}
+  return rows.filter(r=>r.length&&r.some(x=>(""+x).trim()!==""));
+}
+function rowsToTasks(rows){
+  if(!rows.length)return [];
+  const head=rows[0].map(h=>(""+h).trim().toLowerCase());
+  const idx=(names)=>{for(const n of names){const i=head.indexOf(n);if(i>=0)return i;}return -1;};
+  const iTen=idx(["ten","tên nhiệm vụ","ten nhiem vu","nhiệm vụ","tennhiemvu"]);
+  const iPh=idx(["phong","phòng","phòng chủ trì","phong chu tri"]);
+  const iNg=idx(["nguon","cấp chỉ đạo","cap chi dao","nguồn","nguon nhiem vu"]);
+  const iHan=idx(["han","thời hạn","thoi han","hạn","thời hạn hoàn thành"]);
+  const iTt=idx(["tinhtrang","tình trạng","tinh trang","trạng thái"]);
+  const iTd=idx(["tiendo","tiến độ","tien do","tiến độ (%)","%"]);
+  const out=[];
+  for(let r=1;r<rows.length;r++){const row=rows[r];
+    const ten=iTen>=0?(""+row[iTen]).trim():"";
+    if(!ten)continue;
+    const tt=iTt>=0?(""+row[iTt]).trim():"";
+    out.push({ten:ten,phong:normPhong(iPh>=0?row[iPh]:""),nguon:normNguon(iNg>=0?row[iNg]:""),
+      han:iHan>=0?(""+row[iHan]).trim():"",tinhtrang:tt||"Đang thực hiện",
+      td:iTd>=0?(parseInt((""+row[iTd]).replace(/[^0-9]/g,""))||0):0,
+      _han:parseD(iHan>=0?row[iHan]:""),_done:/đã hoàn thành|hoan thanh|hoàn thành/i.test(tt)});
+  }
+  return out;
+}
+function jsonToTasks(arr){
+  return (arr||[]).map(o=>{const tt=(o.tinhtrang||o.trangthai||"").trim();
+    return {ten:(o.ten||o.tenNhiemVu||"").trim(),phong:normPhong(o.phong),nguon:normNguon(o.nguon),
+      han:(o.han||"").trim(),tinhtrang:tt||"Đang thực hiện",td:parseInt(o.tiendo||o.td||0)||0,
+      _han:parseD(o.han),_done:/đã hoàn thành|hoan thanh|hoàn thành/i.test(tt)};}).filter(t=>t.ten);
+}
+
+/* ---- render pieces ---- */
+const LEGEND=`<span><b style="background:var(--done)"></b>Đã hoàn thành</span><span><b style="background:var(--con)"></b>Còn hạn</span><span><b style="background:var(--sap)"></b>Sắp đến hạn</span><span><b style="background:var(--qua)"></b>Quá hạn</span>`;
 function kpiHTML(list){const c=counts(list),total=list.length,rate=total?Math.round(c.done/total*100):0;
-  return `<div class="kpis">
-   <div class="kpi total"><div class="lab">TỔNG NHIỆM VỤ</div><div class="num">${total}</div><div class="sub">đang theo dõi</div></div>
+  return `<div class="kpis"><div class="kpi total"><div class="lab">TỔNG NHIỆM VỤ</div><div class="num">${total}</div><div class="sub">đang theo dõi</div></div>
    <div class="kpi done"><div class="lab">ĐÃ HOÀN THÀNH</div><div class="num">${c.done}</div><div class="ring" style="--p:${rate}"><span>${rate}%</span></div></div>
    <div class="kpi con"><div class="lab">CÒN HẠN</div><div class="num">${c.con}</div><div class="sub">đúng tiến độ</div></div>
    <div class="kpi sap"><div class="lab">SẮP ĐẾN HẠN</div><div class="num">${c.sap}</div><div class="sub">còn ≤ 3 ngày</div></div>
    <div class="kpi qua"><div class="lab">QUÁ HẠN</div><div class="num">${c.qua}</div><div class="sub">đôn đốc ngay</div></div></div>`;}
-
-function barsHTML(list){return PHONG_ORDER.map(p=>{
-  const items=list.filter(t=>t.phong===p);if(!items.length)return "";
-  const s=counts(items),n=items.length,hi=items.some(t=>tierOf(t)==="cao");
+function barsHTML(list){return PHONG_ORDER.map(p=>{const items=list.filter(t=>t.phong===p);if(!items.length)return "";
+  const s=counts(items),n=items.length;
   const seg=(k,cls)=>s[k]?`<i class="seg-${cls}" style="width:${s[k]/n*100}%"></i>`:"";
-  return `<div class="barrow"><div class="pn">${p}${hi?' <span class="fire">★</span>':''}<small>${PHONG_TEN[p]}</small></div>
-    <div class="track">${seg("done","done")}${seg("con","con")}${seg("sap","sap")}${seg("qua","qua")}</div>
-    <div class="tot">${n}</div></div>`;}).join("");}
-
-function detailPagesHTML(){
-  const sorted=[...TASKS].sort((a,b)=>(STORDER[statusOf(a)]-STORDER[statusOf(b)])||(TIER_RANK[tierOf(a)]-TIER_RANK[tierOf(b)])||(daysLeft(a)-daysLeft(b)));
-  const pages=[];for(let i=0;i<sorted.length;i+=PAGE_SIZE)pages.push(sorted.slice(i,i+PAGE_SIZE));
-  return pages.map((pg,idx)=>{
-    const head=`<div class="drow head"><div class="stt">TT</div><div>Tên nhiệm vụ</div><div style="text-align:center">Phòng</div>
-      <div style="text-align:center">Cấp chỉ đạo</div><div style="text-align:center">Thời hạn</div><div style="text-align:center">Trạng thái</div></div>`;
+  return `<div class="barrow"><div class="pn">${PHONG_TEN[p]||p}</div><div class="track">${seg("done","done")}${seg("con","con")}${seg("sap","sap")}${seg("qua","qua")}</div><div class="tot">${n}</div></div>`;}).join("");}
+function detailPages(tasks){
+  const sorted=tasks.filter(t=>statusOf(t)!=="done").sort((a,b)=>(STORDER[statusOf(a)]-STORDER[statusOf(b)])||(TIER_RANK[tierOf(a)]-TIER_RANK[tierOf(b)])||((daysLeft(a)??9999)-(daysLeft(b)??9999)));
+  const ps=[];for(let i=0;i<sorted.length;i+=CONFIG.ROWS_PER_PAGE)ps.push(sorted.slice(i,i+CONFIG.ROWS_PER_PAGE));
+  return ps.map((pg,idx)=>{
+    const head=`<div class="drow head"><div class="stt">TT</div><div>Tên nhiệm vụ</div><div style="text-align:center">Phòng</div><div style="text-align:center">Cấp chỉ đạo</div><div style="text-align:center">Thời hạn</div><div style="text-align:center">Trạng thái</div></div>`;
     const rows=pg.map((t,i)=>{const st=statusOf(t),dl=daysLeft(t);
-      const whenTxt = st==="done"?"Hoàn thành":(st==="qua"?`Quá ${Math.abs(dl)} ngày`:(st==="sap"?(dl===0?"Hôm nay":`Còn ${dl} ngày`):parse(t.han).toLocaleDateString("vi-VN")));
-      return `<div class="drow r-${st}">
-        <div class="stt">${idx*PAGE_SIZE+i+1}</div>
-        <div class="c ten">${t.ten}<small>Hạn: ${parse(t.han).toLocaleDateString("vi-VN")} · ${t.tinhtrang}</small></div>
+      const when=st==="done"?"Hoàn thành":(st==="qua"?`Quá ${Math.abs(dl)} ngày`:(st==="sap"?(dl===0?"Hôm nay":`Còn ${dl} ngày`):(t._han?t._han.toLocaleDateString("vi-VN"):"—")));
+      return `<div class="drow r-${st}"><div class="stt">${idx*CONFIG.ROWS_PER_PAGE+i+1}</div>
+        <div class="c ten">${t.ten}<small>Hạn: ${t._han?t._han.toLocaleDateString("vi-VN"):"—"} · ${t.tinhtrang}</small></div>
         <div class="c ph">${t.phong}</div>
-        <div class="c" style="text-align:center"><span class="badge b-${t.nguon}">${NGUON[t.nguon].ten}</span></div>
-        <div class="hancell">${whenTxt}</div>
+        <div class="c" style="text-align:center"><span class="badge b-${t.nguon}">${(NGUON[t.nguon]||{}).ten||t.nguon}</span></div>
+        <div class="hancell">${when}</div>
         <div class="c" style="text-align:center"><span class="stbadge st-${st}">${LABELS[st]}</span></div></div>`;}).join("");
-    return {title:`DANH MỤC NHIỆM VỤ CHI TIẾT`, page:idx+1, npage:pages.length,
-      html:`<div class="dtable">${head}${rows}</div>`};
+    return {title:"DANH MỤC NHIỆM VỤ CHI TIẾT",rt:`Trang ${idx+1}/${ps.length}`,html:`<div class="dtable">${head}${rows}</div>`};
   });
 }
-
-function buildSlides(){
-  const hi=TASKS.filter(t=>tierOf(t)==="cao");
-  const nTW=hi.filter(t=>t.nguon==="TW").length,nCP=hi.filter(t=>t.nguon==="CP").length,nTTg=hi.filter(t=>t.nguon==="TTg").length;
-  const slides=[];
-  slides.push({title:"TỔNG QUAN CHUNG",cls:"",body:`${kpiHTML(TASKS)}
-    <div class="panel"><h3>Tình hình thực hiện theo từng Phòng</h3><div class="bwrap">${barsHTML(TASKS)}</div>
-    <div class="legend">${LEGEND}</div></div>`});
-  slides.push({title:"NHIỆM VỤ QUAN TRỌNG (ưu tiên cao: TW · Chính phủ · Thủ tướng)",cls:"prio",
-    body:`<div class="prio-line"><span>Trung ương: ${nTW}</span><span>Chính phủ: ${nCP}</span><span>Thủ tướng: ${nTTg}</span></div>
-    ${kpiHTML(hi)}<div class="panel"><h3>Nhiệm vụ ưu tiên cao theo từng Phòng</h3><div class="bwrap">${barsHTML(hi)}</div>
-    <div class="legend">${LEGEND}</div></div>`});
-  detailPagesHTML().forEach(p=>slides.push({title:p.title,cls:"",rt:`Trang ${p.page}/${p.npage}`,body:p.html}));
-  return slides;
+function buildSlides(tasks){
+  const hi=tasks.filter(t=>tierOf(t)==="cao");
+  const nTW=hi.filter(t=>t.nguon==="TW").length,nQH=hi.filter(t=>t.nguon==="QH").length,nTTg=hi.filter(t=>t.nguon==="TTg").length,nCP=hi.filter(t=>t.nguon==="CP").length;
+  const s=[];
+  s.push({title:"TỔNG QUAN CHUNG",cls:"",body:`${kpiHTML(tasks)}<div class="panel"><h3>Tình hình thực hiện theo từng Phòng</h3><div class="bwrap">${barsHTML(tasks)}</div><div class="legend">${LEGEND}</div></div>`});
+  s.push({title:"NHIỆM VỤ QUAN TRỌNG",cls:"prio",body:`<div class="prio-line"><span>Trung ương: ${nTW}</span><span>Quốc hội: ${nQH}</span><span>Thủ tướng: ${nTTg}</span><span>Chính phủ: ${nCP}</span></div>${kpiHTML(hi)}<div class="panel"><h3>Nhiệm vụ ưu tiên cao theo từng Phòng</h3><div class="bwrap">${barsHTML(hi)}</div><div class="legend">${LEGEND}</div></div>`});
+  detailPages(tasks).forEach(p=>s.push({title:p.title,cls:"",rt:p.rt,body:p.html}));
+  return s;
 }
 
-let slides=[], cur=0, timer=null, prog=null;
+/* ---- state & rotation ---- */
+let TASKS=[], slides=[], cur=0, timer=null, lastFresh="";
 const params=new URLSearchParams(location.search);
-const noauto=params.has("noauto"); const startAt=+(params.get("s")||0);
+const noauto=params.has("noauto"), startAt=+(params.get("s")||0);
 
+function setHeader(){const d=today();
+  document.getElementById("hdate").textContent=d.toLocaleDateString("vi-VN",{weekday:"long",day:"2-digit",month:"2-digit",year:"numeric"});
+  document.getElementById("hasof").textContent="Số liệu cập nhật đến hết ngày "+d.toLocaleDateString("vi-VN",{day:"2-digit",month:"2-digit",year:"numeric"});
+  const m=d.getMonth()+1,y=d.getFullYear();
+  let per;
+  if(CONFIG.PERIOD_MODE==="custom"&&CONFIG.PERIOD_LABEL) per=CONFIG.PERIOD_LABEL;
+  else if(CONFIG.PERIOD_MODE==="quarter") per="Quý "+["I","II","III","IV"][Math.floor((m-1)/3)]+"/"+y;
+  else per="Tháng "+m+"/"+y;
+  document.getElementById("hper").textContent="Kỳ theo dõi: "+per;}
 function renderDots(){document.getElementById("dots").innerHTML=slides.map((_,i)=>`<span class="dot ${i===cur?'on':''}"></span>`).join("");}
 function show(i){
-  cur=(i+slides.length)%slides.length;
-  const st=slides[cur];
-  document.getElementById("stage").innerHTML=
-    `<div class="slide on"><div class="stitle ${st.cls}"><span class="bar"></span>${st.title}${st.rt?`<span class="rt">${st.rt}</span>`:''}</div>${st.body}</div>`;
-  document.getElementById("fright").textContent=`Màn hình ${cur+1}/${slides.length}`;
+  if(!slides.length)return;
+  cur=(i+slides.length)%slides.length;const st=slides[cur];
+  document.getElementById("stage").innerHTML=`<div class="slide on"><div class="stitle ${st.cls}"><span class="bar"></span>${st.title}${st.rt?`<span class="rt">${st.rt}</span>`:''}</div>${st.body}</div>`;
+  document.getElementById("fright").innerHTML=`<span class="fresh">${lastFresh}</span> · Màn hình ${cur+1}/${slides.length}`;
   renderDots();
   const pb=document.getElementById("pbar");pb.style.transition="none";pb.style.width="0%";
-  if(!noauto){void pb.offsetWidth;pb.style.transition=`width ${SLIDE_MS}ms linear`;pb.style.width="100%";}
+  if(!noauto){void pb.offsetWidth;pb.style.transition=`width ${CONFIG.SLIDE_SECONDS*1000}ms linear`;pb.style.width="100%";}
 }
 function next(){show(cur+1);}
-function start(){
-  slides=buildSlides();
-  const d=today();
-  document.getElementById("hdate").textContent=d.toLocaleDateString("vi-VN",{weekday:"long",day:"2-digit",month:"2-digit",year:"numeric"});
-  document.getElementById("hasof").textContent="Số liệu đến hết ngày "+d.toLocaleDateString("vi-VN",{day:"2-digit",month:"2-digit",year:"numeric"});
-  show(startAt);
-  if(!noauto){if(timer)clearInterval(timer);timer=setInterval(next,SLIDE_MS);}
+function startRotation(){if(noauto)return;if(timer)clearInterval(timer);timer=setInterval(next,CONFIG.SLIDE_SECONDS*1000);}
+
+async function loadData(first){
+  try{
+    const url=CONFIG.DATA_URL+(CONFIG.DATA_URL.includes("?")?"&":"?")+"_="+Date.now();
+    const res=await fetch(url,{cache:"no-store"});
+    if(!res.ok)throw new Error("HTTP "+res.status);
+    const raw=await res.text();
+    let tasks=[];
+    const trimmed=raw.trim();
+    if(trimmed.startsWith("[")||trimmed.startsWith("{")){tasks=jsonToTasks(JSON.parse(trimmed));}
+    else{tasks=rowsToTasks(parseCSV(raw));}
+    if(!tasks.length)throw new Error("Không có dữ liệu");
+    TASKS=tasks;
+    const now=new Date();
+    lastFresh="Cập nhật lúc "+now.toLocaleTimeString("vi-VN",{hour:"2-digit",minute:"2-digit"});
+    const keep=cur; slides=buildSlides(TASKS); setHeader();
+    if(first){show(startAt);startRotation();}
+    else{ if(keep>=slides.length)cur=0; /* giữ nguyên trang đang chiếu, dữ liệu mới áp dụng ở vòng sau */ }
+  }catch(e){
+    if(first){document.getElementById("msg").innerHTML=`Chưa đọc được dữ liệu.<div class="sp">Kiểm tra đường dẫn dữ liệu trong phần CẤU HÌNH (DATA_URL).<br>Chi tiết: ${e.message}</div>`;}
+  }
 }
-document.addEventListener("keydown",e=>{
-  if(e.key==="ArrowRight"){if(timer)clearInterval(timer);next();if(!noauto)timer=setInterval(next,SLIDE_MS);}
-  if(e.key==="ArrowLeft"){if(timer)clearInterval(timer);show(cur-1);if(!noauto)timer=setInterval(next,SLIDE_MS);}
-});
-document.addEventListener("click",()=>{if(!noauto){if(timer)clearInterval(timer);next();timer=setInterval(next,SLIDE_MS);}});
-start();
-setInterval(start, 30*60*1000); // làm mới dữ liệu mỗi 30 phút
+document.addEventListener("keydown",e=>{if(e.key==="ArrowRight"){next();startRotation();}if(e.key==="ArrowLeft"){show(cur-1);startRotation();}});
+document.addEventListener("click",()=>{if(!noauto){next();startRotation();}});
+
+setHeader();
+loadData(true);
+setInterval(()=>loadData(false), Math.max(1,CONFIG.REFRESH_MINUTES)*60000);
+setInterval(setHeader, 60000);
+
 </script>
 </body>
 </html>
