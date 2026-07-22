@@ -63,15 +63,18 @@
   .prio-line{display:flex;gap:1vw;margin-bottom:1.2vh}
   .prio-line span{background:var(--gold-bg);border:1px solid #e2cf92;border-radius:2vh;padding:.5vh 1.2vw;font-size:1.9vh;color:#8a6200;font-weight:700}
   .dtable{flex:1;background:var(--card);border-radius:1.2vh;overflow:hidden;box-shadow:0 .5vh 1.6vh rgba(20,30,60,.08);display:flex;flex-direction:column}
-  .drow{display:grid;grid-template-columns:4vw 1fr 8vw 10vw 12vw 13vw;align-items:center;gap:1vw;padding:0 1.4vw;border-bottom:1px solid var(--line);flex:1}
-  .drow.head{background:var(--navy);color:#fff;flex:0 0 6vh;font-weight:700;font-size:1.9vh}
+  .drow{display:grid;grid-template-columns:3.5vw 1fr 6vw 12vw 9.5vw 10vw 11vw;align-items:center;gap:1vw;padding:1vh 1.4vw;border-bottom:1px solid var(--line)}
+  .drow.head{background:var(--navy);color:#fff;height:6vh;padding:0 1.4vw;font-weight:700;font-size:1.9vh}
   .drow .c{font-size:2.15vh}
   .drow .stt{font-weight:700;color:var(--muted);text-align:center;font-size:2vh}
+  .drow.head>*{align-self:center}
+  .drow.head .stt{color:#fff;font-size:1.9vh}
   .drow .ten{font-weight:700;line-height:1.15}
   .drow .ten small{display:block;font-weight:400;font-size:1.5vh;color:var(--muted)}
   .drow .ph{text-align:center;font-weight:700}
+  .drow .ldc{font-size:1.85vh;font-weight:600;line-height:1.15}
   .badge{display:inline-block;font-size:1.5vh;font-weight:800;padding:.4vh .7vw;border-radius:.6vh;color:#fff}
-  .b-TW,.b-QH,.b-TTg,.b-CP{background:var(--gold)} .b-Bo{background:var(--navy2)} .b-PH,.b-PL,.b-Khac{background:#8a94a6}
+  .b-TW,.b-QH,.b-TTg,.b-CP{background:var(--gold)} .b-Bo,.b-PL,.b-DN,.b-DP{background:var(--navy2)} .b-PH,.b-Khac{background:#8a94a6}
   .hancell{text-align:center;font-weight:700;font-size:2vh}
   .stbadge{display:inline-block;font-size:1.8vh;font-weight:800;padding:.5vh .8vw;border-radius:.6vh}
   .st-done{background:var(--done-bg);color:var(--done-tx)} .st-con{background:var(--con-bg);color:var(--con-tx)}
@@ -110,18 +113,20 @@
      - Hoặc để "data.csv" nếu đặt tệp dữ liệu cùng thư mục trên server.
    ============================================================ */
 const CONFIG = {
-  DATA_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQJqnhtemWlUHjNwK_nDq4jFlB0Ff6FUovZaNGThpM036O6n08Gl-DITB80l9s5rA/pub?gid=1428623228&single=true&output=csv",
+  DATA_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQkYPm0ujKqLrohQEu7A577uAQDHb4r52eq_rtdv8RJU7uei2qyDB6cO1O__Ug9TtmeDlESxSSfCSUA/pub?gid=760938962&single=true&output=csv",
   REFRESH_MINUTES: 5,     // tự đọc lại dữ liệu mỗi 5 phút
-  SLIDE_SECONDS: 15,      // thời gian mỗi trang
+  SLIDE_SECONDS: 20,      // thời gian mỗi trang
   ROWS_PER_PAGE: 7,       // số nhiệm vụ mỗi trang danh mục
+  WARN_DAYS: 5,           // còn ≤ số ngày này → cảnh báo "Sắp đến hạn"
   REF_DATE: null,          // null = dùng ngày thực; hoặc "2026-07-13" để cố định khi thử
   PERIOD_MODE: "month",    // "month" = tự hiện Tháng M/YYYY · "quarter" = tự hiện Quý N/YYYY · "custom" = dùng PERIOD_LABEL
-  PERIOD_LABEL: ""         // chỉ dùng khi PERIOD_MODE = "custom", ví dụ "6 tháng đầu năm 2026"
+  PERIOD_LABEL: "",        // chỉ dùng khi PERIOD_MODE = "custom", ví dụ "6 tháng đầu năm 2026"
+  COUNT_DONE_IN_PERIOD: true  // true = chỉ tính việc ĐÃ HOÀN THÀNH trong kỳ đang theo dõi (việc chưa xong luôn hiển thị) · false = tính mọi việc đã hoàn thành
 };
 
 const PHONG_TEN={VP:"Văn phòng",CSTH:"Phòng Chính sách tổng hợp",SXĐM:"Phòng Sắp xếp đổi mới","ĐDCSH":"Phòng Đại diện chủ sở hữu",NV1:"Phòng Nghiệp vụ 1",NV2:"Phòng Nghiệp vụ 2",NV3:"Phòng Nghiệp vụ 3",NV4:"Phòng Nghiệp vụ 4",NV5:"Phòng Nghiệp vụ 5"};
 const PHONG_ORDER=["VP","CSTH","SXĐM","ĐDCSH","NV1","NV2","NV3","NV4","NV5"];
-const NGUON={TW:{ten:"Trung ương",tier:"cao"},QH:{ten:"Quốc hội",tier:"cao"},TTg:{ten:"Thủ tướng",tier:"cao"},CP:{ten:"Chính phủ",tier:"cao"},Bo:{ten:"Bộ giao",tier:"uutien"},PH:{ten:"Phối hợp",tier:"thuong"},PL:{ten:"Theo QĐ pháp luật",tier:"uutien"},Khac:{ten:"Khác",tier:"thuong"}};
+const NGUON={TW:{ten:"Trung ương",tier:"cao"},QH:{ten:"Quốc hội",tier:"cao"},TTg:{ten:"Thủ tướng Chính phủ",tier:"cao"},CP:{ten:"Chính phủ",tier:"cao"},Bo:{ten:"Bộ giao",tier:"uutien"},PH:{ten:"Phối hợp",tier:"thuong"},PL:{ten:"Theo QĐ pháp luật",tier:"uutien"},DN:{ten:"Doanh nghiệp",tier:"uutien"},DP:{ten:"Địa phương/Bộ ngành",tier:"uutien"},Khac:{ten:"Khác",tier:"thuong"}};
 const TIER_RANK={cao:0,uutien:1,thuong:2};
 const LABELS={done:"Đã hoàn thành",con:"Còn hạn",sap:"Sắp đến hạn",qua:"Quá hạn"};
 const STORDER={qua:0,sap:1,con:2,done:3};
@@ -132,9 +137,20 @@ function parseD(s){if(!s)return null;s=(""+s).trim();
   m=s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/); if(m)return new Date(+m[3],+m[2]-1,+m[1]);
   const d=new Date(s); return isNaN(d)?null:d;}
 function daysLeft(t){const d=t._han; if(!d)return null; const x=Math.round((d-today())/86400000); return x;}
-function statusOf(t){if(t._done)return "done";const dl=daysLeft(t);if(dl===null)return "con";if(dl<0)return "qua";if(dl<=3)return "sap";return "con";}
+function statusOf(t){if(t._done)return "done";const dl=daysLeft(t);if(dl===null)return "con";if(dl<0)return "qua";if(dl<=CONFIG.WARN_DAYS)return "sap";return "con";}
 function tierOf(t){return NGUON[t.nguon]?NGUON[t.nguon].tier:"thuong";}
 function counts(list){const c={done:0,con:0,sap:0,qua:0};list.forEach(t=>c[statusOf(t)]++);return c;}
+/* ---- lọc theo kỳ: giữ mọi việc CHƯA hoàn thành + việc ĐÃ hoàn thành trong kỳ ---- */
+function periodRange(){const d=today(),y=d.getFullYear(),m=d.getMonth();
+  if(CONFIG.PERIOD_MODE==="custom")return null;                 // custom: không lọc theo ngày
+  if(CONFIG.PERIOD_MODE==="quarter"){const q=Math.floor(m/3);return [new Date(y,q*3,1),new Date(y,q*3+3,0)];}
+  return [new Date(y,m,1),new Date(y,m+1,0)];                   // month
+}
+function doneInPeriod(t){const r=periodRange();if(!r)return true;
+  if(!t._hoanthanh)return true;                                // đã hoàn thành nhưng chưa nhập ngày → vẫn tính (khớp với sheet Tổng hợp)
+  return t._hoanthanh>=r[0]&&t._hoanthanh<=r[1];}
+function visibleTasks(tasks){if(!CONFIG.COUNT_DONE_IN_PERIOD)return tasks;
+  return tasks.filter(t=>!t._done||doneInPeriod(t));}
 
 function normNguon(s){s=(""+(s||"")).trim();
   if(/^TW\b/i.test(s)||/Trung ương/i.test(s))return "TW";
@@ -144,7 +160,10 @@ function normNguon(s){s=(""+(s||"")).trim();
   if(/^Bo\b/i.test(s)||/Bộ giao|Nhiệm vụ Bộ|Bộ Tài chính/i.test(s))return "Bo";
   if(/^PH\b/i.test(s)||/Phối hợp/i.test(s))return "PH";
   if(/^PL\b|^DK\b/i.test(s)||/pháp luật|quy định|Định kỳ|bất thường/i.test(s))return "PL";
+  if(/^DN\b/i.test(s)||/Doanh nghiệp/i.test(s))return "DN";
+  if(/^DP\b/i.test(s)||/Địa phương|Bộ ngành/i.test(s))return "DP";
   return "Khac";}
+function nameOnly(s){return (""+(s||"")).replace(/\s*\([^)]*\)/g,"").trim();}   // bỏ phần (PCT)/(Cục trưởng), chỉ giữ tên
 function normPhong(s){s=(""+(s||"")).trim().toUpperCase().replace(/\./g,"");
   const map={VP:"VP",CSTH:"CSTH","SXĐM":"SXĐM",SXDM:"SXĐM","ĐDCSH":"ĐDCSH",DDCSH:"ĐDCSH",NV1:"NV1",NV2:"NV2",NV3:"NV3",NV4:"NV4",NV5:"NV5"};
   return map[s]||s;}
@@ -168,25 +187,27 @@ function rowsToTasks(rows){
   const iPh=idx(["phong","phòng","phòng chủ trì","phong chu tri"]);
   const iNg=idx(["nguon","cấp chỉ đạo","cap chi dao","nguồn","nguon nhiem vu"]);
   const iHan=idx(["han","thời hạn","thoi han","hạn","thời hạn hoàn thành"]);
+  const iLd=idx(["ldcuc","lãnh đạo cục","lanh dao cuc","lãnh đạo cục phụ trách","lđ cục"]);
   const iTt=idx(["tinhtrang","tình trạng","tinh trang","trạng thái"]);
   const iTd=idx(["tiendo","tiến độ","tien do","tiến độ (%)","%"]);
+  const iHt=idx(["ngayhoanthanh","ngày hoàn thành","ngay hoan thanh","ngày ht","ngayht"]);
   const out=[];
   for(let r=1;r<rows.length;r++){const row=rows[r];
     const ten=iTen>=0?(""+row[iTen]).trim():"";
     if(!ten)continue;
     const tt=iTt>=0?(""+row[iTt]).trim():"";
-    out.push({ten:ten,phong:normPhong(iPh>=0?row[iPh]:""),nguon:normNguon(iNg>=0?row[iNg]:""),
+    out.push({ten:ten,phong:normPhong(iPh>=0?row[iPh]:""),nguon:normNguon(iNg>=0?row[iNg]:""),ldcuc:nameOnly(iLd>=0?row[iLd]:""),
       han:iHan>=0?(""+row[iHan]).trim():"",tinhtrang:tt||"Đang thực hiện",
       td:iTd>=0?(parseInt((""+row[iTd]).replace(/[^0-9]/g,""))||0):0,
-      _han:parseD(iHan>=0?row[iHan]:""),_done:/đã hoàn thành|hoan thanh|hoàn thành/i.test(tt)});
+      _han:parseD(iHan>=0?row[iHan]:""),_hoanthanh:parseD(iHt>=0?row[iHt]:""),_done:/đã hoàn thành|hoan thanh|hoàn thành/i.test(tt)});
   }
   return out;
 }
 function jsonToTasks(arr){
   return (arr||[]).map(o=>{const tt=(o.tinhtrang||o.trangthai||"").trim();
-    return {ten:(o.ten||o.tenNhiemVu||"").trim(),phong:normPhong(o.phong),nguon:normNguon(o.nguon),
+    return {ten:(o.ten||o.tenNhiemVu||"").trim(),phong:normPhong(o.phong),nguon:normNguon(o.nguon),ldcuc:nameOnly(o.ldcuc),
       han:(o.han||"").trim(),tinhtrang:tt||"Đang thực hiện",td:parseInt(o.tiendo||o.td||0)||0,
-      _han:parseD(o.han),_done:/đã hoàn thành|hoan thanh|hoàn thành/i.test(tt)};}).filter(t=>t.ten);
+      _han:parseD(o.han),_hoanthanh:parseD(o.ngayhoanthanh||o.hoanthanh),_done:/đã hoàn thành|hoan thanh|hoàn thành/i.test(tt)};}).filter(t=>t.ten);
 }
 
 /* ---- render pieces ---- */
@@ -195,34 +216,59 @@ function kpiHTML(list){const c=counts(list),total=list.length,rate=total?Math.ro
   return `<div class="kpis"><div class="kpi total"><div class="lab">TỔNG NHIỆM VỤ</div><div class="num">${total}</div><div class="sub">đang theo dõi</div></div>
    <div class="kpi done"><div class="lab">ĐÃ HOÀN THÀNH</div><div class="num">${c.done}</div><div class="ring" style="--p:${rate}"><span>${rate}%</span></div></div>
    <div class="kpi con"><div class="lab">CÒN HẠN</div><div class="num">${c.con}</div><div class="sub">đúng tiến độ</div></div>
-   <div class="kpi sap"><div class="lab">SẮP ĐẾN HẠN</div><div class="num">${c.sap}</div><div class="sub">còn ≤ 3 ngày</div></div>
+   <div class="kpi sap"><div class="lab">SẮP ĐẾN HẠN</div><div class="num">${c.sap}</div><div class="sub">còn ≤ ${CONFIG.WARN_DAYS} ngày</div></div>
    <div class="kpi qua"><div class="lab">QUÁ HẠN</div><div class="num">${c.qua}</div><div class="sub">đôn đốc ngay</div></div></div>`;}
 function barsHTML(list){return PHONG_ORDER.map(p=>{const items=list.filter(t=>t.phong===p);if(!items.length)return "";
   const s=counts(items),n=items.length;
   const seg=(k,cls)=>s[k]?`<i class="seg-${cls}" style="width:${s[k]/n*100}%"></i>`:"";
   return `<div class="barrow"><div class="pn">${PHONG_TEN[p]||p}</div><div class="track">${seg("done","done")}${seg("con","con")}${seg("sap","sap")}${seg("qua","qua")}</div><div class="tot">${n}</div></div>`;}).join("");}
+const DHEAD=`<div class="drow head"><div style="text-align:center">TT</div><div>Tên nhiệm vụ</div><div style="text-align:center">Phòng</div><div style="text-align:center">Lãnh đạo Cục phụ trách</div><div style="text-align:center">Nguồn việc</div><div style="text-align:center">Thời hạn</div><div style="text-align:center">Trạng thái</div></div>`;
+function detailRowHTML(t,num){const st=statusOf(t),dl=daysLeft(t);
+  const when=st==="done"?"Hoàn thành":(st==="qua"?`Quá ${Math.abs(dl)} ngày`:(st==="sap"?(dl===0?"Hôm nay":`Còn ${dl} ngày`):(t._han?t._han.toLocaleDateString("vi-VN"):"—")));
+  return `<div class="drow r-${st}"><div class="stt">${num}</div>`+
+    `<div class="c ten">${t.ten}<small>Hạn: ${t._han?t._han.toLocaleDateString("vi-VN"):"—"} · ${t.tinhtrang}</small></div>`+
+    `<div class="c ph">${t.phong}</div>`+
+    `<div class="c ldc" style="text-align:center">${t.ldcuc||"—"}</div>`+
+    `<div class="c" style="text-align:center"><span class="badge b-${t.nguon}">${(NGUON[t.nguon]||{}).ten||t.nguon}</span></div>`+
+    `<div class="hancell">${when}</div>`+
+    `<div class="c" style="text-align:center"><span class="stbadge st-${st}">${LABELS[st]}</span></div></div>`;}
+/* Đo chiều cao thực của từng dòng rồi dồn tối đa số dòng vừa khít mỗi trang (dòng ngắn tự co lại) */
+function packByHeight(rowHTMLs){
+  const stage=document.getElementById("stage");if(!stage)return null;
+  const W=stage.clientWidth,H=stage.clientHeight;if(!W||!H)return null;
+  const box=document.createElement("div");
+  box.style.cssText=`position:fixed;left:-99999px;top:0;width:${W}px;height:${H}px`;
+  box.innerHTML=`<div class="slide on" style="position:static;height:100%"><div class="stitle"><span class="bar"></span>DANH MỤC NHIỆM VỤ CHI TIẾT<span class="rt">Trang 1/1</span></div><div class="dtable">${DHEAD}${rowHTMLs.join("")}</div></div>`;
+  document.body.appendChild(box);
+  const table=box.querySelector(".dtable");const els=[...table.querySelectorAll(".drow")];
+  const headH=els[0].getBoundingClientRect().height;
+  const avail=table.clientHeight-headH-2;
+  const hs=els.slice(1).map(el=>el.getBoundingClientRect().height);
+  document.body.removeChild(box);
+  if(avail<=0||!hs.length)return null;
+  const pages=[];let cur=[],acc=0;
+  hs.forEach((h,i)=>{if(cur.length&&acc+h>avail){pages.push(cur);cur=[];acc=0;}cur.push(i);acc+=h;});
+  if(cur.length)pages.push(cur);
+  return pages;
+}
 function detailPages(tasks){
   const sorted=tasks.filter(t=>statusOf(t)!=="done").sort((a,b)=>(STORDER[statusOf(a)]-STORDER[statusOf(b)])||(TIER_RANK[tierOf(a)]-TIER_RANK[tierOf(b)])||((daysLeft(a)??9999)-(daysLeft(b)??9999)));
-  const ps=[];for(let i=0;i<sorted.length;i+=CONFIG.ROWS_PER_PAGE)ps.push(sorted.slice(i,i+CONFIG.ROWS_PER_PAGE));
-  return ps.map((pg,idx)=>{
-    const head=`<div class="drow head"><div class="stt">TT</div><div>Tên nhiệm vụ</div><div style="text-align:center">Phòng</div><div style="text-align:center">Cấp chỉ đạo</div><div style="text-align:center">Thời hạn</div><div style="text-align:center">Trạng thái</div></div>`;
-    const rows=pg.map((t,i)=>{const st=statusOf(t),dl=daysLeft(t);
-      const when=st==="done"?"Hoàn thành":(st==="qua"?`Quá ${Math.abs(dl)} ngày`:(st==="sap"?(dl===0?"Hôm nay":`Còn ${dl} ngày`):(t._han?t._han.toLocaleDateString("vi-VN"):"—")));
-      return `<div class="drow r-${st}"><div class="stt">${idx*CONFIG.ROWS_PER_PAGE+i+1}</div>
-        <div class="c ten">${t.ten}<small>Hạn: ${t._han?t._han.toLocaleDateString("vi-VN"):"—"} · ${t.tinhtrang}</small></div>
-        <div class="c ph">${t.phong}</div>
-        <div class="c" style="text-align:center"><span class="badge b-${t.nguon}">${(NGUON[t.nguon]||{}).ten||t.nguon}</span></div>
-        <div class="hancell">${when}</div>
-        <div class="c" style="text-align:center"><span class="stbadge st-${st}">${LABELS[st]}</span></div></div>`;}).join("");
-    return {title:"DANH MỤC NHIỆM VỤ CHI TIẾT",rt:`Trang ${idx+1}/${ps.length}`,html:`<div class="dtable">${head}${rows}</div>`};
-  });
+  if(!sorted.length)return [];
+  const htmls=sorted.map((t,i)=>detailRowHTML(t,i+1));
+  let pages=packByHeight(htmls);
+  if(!pages||!pages.length){ // dự phòng: nếu không đo được thì chia cố định theo ROWS_PER_PAGE
+    pages=[];for(let i=0;i<htmls.length;i+=CONFIG.ROWS_PER_PAGE)pages.push([...Array(Math.min(CONFIG.ROWS_PER_PAGE,htmls.length-i)).keys()].map(k=>i+k));
+  }
+  return pages.map((idxs,pi,arr)=>({title:"DANH MỤC NHIỆM VỤ CHI TIẾT",rt:`Trang ${pi+1}/${arr.length}`,
+    html:`<div class="dtable">${DHEAD}${idxs.map(i=>htmls[i]).join("")}</div>`}));
 }
-function buildSlides(tasks){
+function buildSlides(allTasks){
+  const tasks=visibleTasks(allTasks);
   const hi=tasks.filter(t=>tierOf(t)==="cao");
   const nTW=hi.filter(t=>t.nguon==="TW").length,nQH=hi.filter(t=>t.nguon==="QH").length,nTTg=hi.filter(t=>t.nguon==="TTg").length,nCP=hi.filter(t=>t.nguon==="CP").length;
   const s=[];
   s.push({title:"TỔNG QUAN CHUNG",cls:"",body:`${kpiHTML(tasks)}<div class="panel"><h3>Tình hình thực hiện theo từng Phòng</h3><div class="bwrap">${barsHTML(tasks)}</div><div class="legend">${LEGEND}</div></div>`});
-  s.push({title:"NHIỆM VỤ QUAN TRỌNG",cls:"prio",body:`<div class="prio-line"><span>Trung ương: ${nTW}</span><span>Quốc hội: ${nQH}</span><span>Thủ tướng: ${nTTg}</span><span>Chính phủ: ${nCP}</span></div>${kpiHTML(hi)}<div class="panel"><h3>Nhiệm vụ ưu tiên cao theo từng Phòng</h3><div class="bwrap">${barsHTML(hi)}</div><div class="legend">${LEGEND}</div></div>`});
+  s.push({title:"NHIỆM VỤ QUAN TRỌNG",cls:"prio",body:`<div class="prio-line"><span>Trung ương: ${nTW}</span><span>Quốc hội: ${nQH}</span><span>Thủ tướng Chính phủ: ${nTTg}</span><span>Chính phủ: ${nCP}</span></div>${kpiHTML(hi)}<div class="panel"><h3>Nhiệm vụ ưu tiên cao theo từng Phòng</h3><div class="bwrap">${barsHTML(hi)}</div><div class="legend">${LEGEND}</div></div>`});
   detailPages(tasks).forEach(p=>s.push({title:p.title,cls:"",rt:p.rt,body:p.html}));
   return s;
 }
