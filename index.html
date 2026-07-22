@@ -472,8 +472,8 @@ function applyReportFilters(){
         rk.map((r,i)=>`<div class="rrow ${r.qua>0?'alert':(r.sap>0?'warn':'')}"><div class="rk">${i+1}</div><div class="pn">${PHONG_TEN[r.p]||r.p}</div><div class="m q">${r.qua||"–"}</div><div class="m s">${r.sap||"–"}</div></div>`).join("");
     }
   }
-  // Danh sách theo trạng thái + tìm kiếm (bản điện thoại phục vụ tra cứu → hiện cả việc mật)
-  let pool=base.filter(t=>!CONFIG.HIDE_NGUON_DETAIL.includes(t.nguon));
+  // Danh sách theo trạng thái + tìm kiếm (bản điện thoại phục vụ tra cứu → hiện TẤT CẢ: cả việc mật, cả nguồn Phối hợp, để khớp với ô đếm)
+  let pool=[...base];
   const st=RF.status;
   if(st==="done")pool=pool.filter(t=>statusOf(t)==="done");
   else if(st==="qua")pool=pool.filter(t=>statusOf(t)==="qua");
