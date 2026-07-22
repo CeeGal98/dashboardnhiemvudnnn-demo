@@ -84,7 +84,7 @@
   /* ============ CHẾ ĐỘ BÁO CÁO (mobile / gửi mọi người) ============ */
   html.report{height:auto;overflow:visible}
   body.report{height:auto;min-height:100%;overflow:visible;display:block;background:var(--bg)}
-  body.report header{height:auto;padding:12px 16px;position:sticky;top:0;z-index:9;gap:12px}
+  body.report header{height:auto;padding:12px 16px;position:static;gap:12px}
   body.report .emblem{width:42px;height:42px}
   body.report .htitle small{font-size:10px;letter-spacing:.2px}
   body.report .htitle h1{font-size:15px;margin-top:2px}
@@ -129,7 +129,7 @@
   .rp .empty{background:#fff;border-radius:12px;padding:18px;text-align:center;color:var(--muted);font-size:13.5px}
   @media (min-width:560px){ .rp .kpis2{grid-template-columns:repeat(3,1fr)} }
   /* thanh lọc bản điện thoại */
-  .rp .fbar{position:sticky;top:64px;z-index:8;background:var(--bg);padding:8px 0 8px;display:flex;flex-direction:column;gap:8px;border-bottom:1px solid var(--line)}
+  .rp .fbar{position:sticky;top:0;z-index:8;background:var(--bg);padding:8px 0 8px;display:flex;flex-direction:column;gap:8px;border-bottom:1px solid var(--line)}
   .rp .frow{display:flex;gap:8px}
   .rp .frow select{flex:1;min-width:0;font-size:13px;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);font-family:inherit}
   .rp .chips2{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
