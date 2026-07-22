@@ -74,8 +74,9 @@
   .rkhead .box .num{font-size:5.4vh;font-weight:800;line-height:1;margin-top:.4vh}
   .rkhead .box.qua .num{color:var(--qua-tx)} .rkhead .box.sap .num{color:var(--sap-tx)} .rkhead .box.nohan .num{color:#5b6472}
   .rktable{flex:1;display:flex;flex-direction:column;gap:.7vh}
-  .rkrow{display:grid;grid-template-columns:7vw 1fr 14vw 14vw 12vw;align-items:center;gap:1vw;padding:0 1.6vw;border-radius:1vh;background:var(--card);box-shadow:0 .3vh 1vh rgba(20,30,60,.06);flex:1}
+  .rkrow{display:grid;grid-template-columns:7vw 1fr 16vw 16vw;align-items:center;gap:1vw;padding:0 1.6vw;border-radius:1vh;background:var(--card);box-shadow:0 .3vh 1vh rgba(20,30,60,.06);flex:1}
   .rkrow.head{background:var(--navy);color:#fff;flex:0 0 5.5vh;font-weight:700;font-size:1.9vh;box-shadow:none}
+  .rkrow.head .rank,.rkrow.head .pn,.rkrow.head .m{font-size:1.9vh;font-weight:700}
   .rkrow .rank{font-size:2.8vh;font-weight:800;text-align:center;color:var(--navy)}
   .rkrow .pn{font-size:2.4vh;font-weight:700}
   .rkrow .m{text-align:center;font-size:2.6vh;font-weight:800}
@@ -109,13 +110,13 @@
   .rp .rkline .b.s{border-top-color:var(--sap)} .rp .rkline .b.n{border-top-color:#8a94a6}
   .rp .rkline .b .lab{font-size:10.5px;color:var(--muted);font-weight:600} .rp .rkline .b .num{font-size:24px;font-weight:800}
   .rp .rkline .b.q .num{color:var(--qua-tx)} .rp .rkline .b.s .num{color:var(--sap-tx)} .rp .rkline .b.n .num{color:#5b6472}
-  .rp .rrow{display:grid;grid-template-columns:26px 1fr 52px 52px;gap:8px;align-items:center;background:#fff;border-radius:10px;padding:9px 12px;margin-bottom:6px;box-shadow:0 1px 6px rgba(20,30,60,.05)}
+  .rp .rrow{display:grid;grid-template-columns:26px 1fr 68px 78px;gap:8px;align-items:center;background:#fff;border-radius:10px;padding:9px 12px;margin-bottom:6px;box-shadow:0 1px 6px rgba(20,30,60,.05)}
   .rp .rrow.alert{background:#fdeceb} .rp .rrow.warn{background:#fdf6ea}
   .rp .rrow .rk{font-weight:800;color:var(--navy);text-align:center}
   .rp .rrow .pn{font-weight:700;font-size:13.5px}
   .rp .rrow .m{text-align:center;font-weight:800;font-size:16px}
   .rp .rrow .m.q{color:var(--qua-tx)} .rp .rrow .m.s{color:var(--sap-tx)}
-  .rp .rhd{display:grid;grid-template-columns:26px 1fr 52px 52px;gap:8px;padding:2px 12px 4px;font-size:10.5px;color:var(--muted);font-weight:700}
+  .rp .rhd{display:grid;grid-template-columns:26px 1fr 68px 78px;gap:8px;padding:2px 12px 4px;font-size:10px;color:var(--muted);font-weight:700}
   .rp .rhd .m{text-align:center}
   .rp .card{background:#fff;border-radius:12px;padding:11px 13px;margin-bottom:9px;box-shadow:0 2px 10px rgba(20,30,60,.06);border-left:4px solid var(--qua)}
   .rp .card.sap{border-left-color:var(--sap)} .rp .card.con{border-left-color:#c3ccdb}
@@ -291,11 +292,11 @@ function jsonToTasks(arr){
 /* ---- render pieces ---- */
 const LEGEND=`<span><b style="background:var(--done)"></b>Đã hoàn thành</span><span><b style="background:var(--con)"></b>Còn hạn</span><span><b style="background:var(--sap)"></b>Sắp đến hạn</span><span><b style="background:var(--qua)"></b>Quá hạn</span>`;
 function kpiHTML(list){const c=counts(list),total=list.length,rate=total?Math.round(c.done/total*100):0;
-  return `<div class="kpis"><div class="kpi total"><div class="lab">TỔNG NHIỆM VỤ</div><div class="num">${total}</div><div class="sub">đang theo dõi</div></div>
+  return `<div class="kpis"><div class="kpi total"><div class="lab">TỔNG NHIỆM VỤ</div><div class="num">${total}</div></div>
    <div class="kpi done"><div class="lab">ĐÃ HOÀN THÀNH</div><div class="num">${c.done}</div><div class="ring" style="--p:${rate}"><span>${rate}%</span></div></div>
-   <div class="kpi con"><div class="lab">CÒN HẠN</div><div class="num">${c.con}</div><div class="sub">đúng tiến độ</div></div>
+   <div class="kpi con"><div class="lab">CÒN HẠN</div><div class="num">${c.con}</div></div>
    <div class="kpi sap"><div class="lab">SẮP ĐẾN HẠN</div><div class="num">${c.sap}</div><div class="sub">còn ≤ ${CONFIG.WARN_DAYS} ngày</div></div>
-   <div class="kpi qua"><div class="lab">QUÁ HẠN</div><div class="num">${c.qua}</div><div class="sub">đôn đốc ngay</div></div></div>`;}
+   <div class="kpi qua"><div class="lab">QUÁ HẠN</div><div class="num">${c.qua}</div></div></div>`;}
 function barsHTML(list){return PHONG_ORDER.map(p=>{const items=list.filter(t=>t.phong===p);if(!items.length)return "";
   const s=counts(items),n=items.length;
   const seg=(k,cls)=>s[k]?`<i class="seg-${cls}" style="width:${s[k]/n*100}%"></i>`:"";
@@ -368,9 +369,9 @@ function rankingHTML(list){
   const rows=PHONG_ORDER.map(p=>{const it=open.filter(t=>t.phong===p);
     return {p,qua:it.filter(t=>statusOf(t)==="qua").length,sap:it.filter(t=>statusOf(t)==="sap").length,open:it.length};})
     .filter(r=>r.open>0).sort((a,b)=>(b.qua-a.qua)||(b.sap-a.sap)||(b.open-a.open));
-  const head=`<div class="rkrow head"><div class="rank" style="color:#fff">STT</div><div class="pn">Phòng</div><div class="m">Quá hạn</div><div class="m">Sắp đến hạn</div><div class="m">Đang mở</div></div>`;
+  const head=`<div class="rkrow head"><div class="rank" style="color:#fff">STT</div><div class="pn">Phòng</div><div class="m">Quá hạn</div><div class="m">Sắp đến hạn</div></div>`;
   const body=rows.map((r,i)=>{const cls=r.qua>0?"alert":(r.sap>0?"warn":"");
-    return `<div class="rkrow ${cls}"><div class="rank">${i+1}</div><div class="pn">${PHONG_TEN[r.p]||r.p}</div><div class="m q">${r.qua||"–"}</div><div class="m s">${r.sap||"–"}</div><div class="m" style="color:var(--navy)">${r.open}</div></div>`;}).join("");
+    return `<div class="rkrow ${cls}"><div class="rank">${i+1}</div><div class="pn">${PHONG_TEN[r.p]||r.p}</div><div class="m q">${r.qua||"–"}</div><div class="m s">${r.sap||"–"}</div></div>`;}).join("");
   const nudge=totNoHan>0?`<div class="legend" style="margin-top:1.1vh;color:var(--qua-tx);font-weight:700">⚠ ${totNoHan} nhiệm vụ chưa khai báo thời hạn — đề nghị các Phòng bổ sung để theo dõi đúng tiến độ.</div>`:"";
   return `<div class="rkhead"><div class="box qua"><div class="lab">TỔNG QUÁ HẠN</div><div class="num">${totQua}</div></div><div class="box sap"><div class="lab">TỔNG SẮP ĐẾN HẠN</div><div class="num">${totSap}</div></div><div class="box nohan"><div class="lab">CHƯA CÓ THỜI HẠN</div><div class="num">${totNoHan}</div></div></div><div class="rktable">${head}${body||`<div class="rkrow"><div></div><div class="pn" style="color:var(--muted);font-weight:400">Không có Phòng nào có nhiệm vụ đang mở.</div><div></div><div></div><div></div></div>`}</div>${nudge}`;
 }
@@ -387,7 +388,7 @@ function buildSlides(allTasks){
 }
 
 /* ---- state & rotation ---- */
-let TASKS=[], slides=[], cur=0, timer=null, lastFresh="";
+let TASKS=[], slides=[], cur=0, timer=null, lastFresh="", updTime="";
 const params=new URLSearchParams(location.search);
 const noauto=params.has("noauto"), startAt=+(params.get("s")||0);
 // Chế độ BÁO CÁO (cuộn dọc, cho điện thoại / gửi mọi người): thêm ?view=report vào link.
@@ -398,7 +399,7 @@ if(REPORT){document.documentElement.classList.add("report");document.body.classL
 
 function setHeader(){const d=today();
   document.getElementById("hdate").textContent=d.toLocaleDateString("vi-VN",{weekday:"long",day:"2-digit",month:"2-digit",year:"numeric"});
-  document.getElementById("hasof").textContent="Số liệu cập nhật đến hết ngày "+d.toLocaleDateString("vi-VN",{day:"2-digit",month:"2-digit",year:"numeric"});
+  document.getElementById("hasof").textContent=updTime?("Cập nhật lúc: "+updTime):"—";
   const m=d.getMonth()+1,y=d.getFullYear();
   let per;
   if(CONFIG.PERIOD_MODE==="custom"&&CONFIG.PERIOD_LABEL) per=CONFIG.PERIOD_LABEL;
@@ -467,8 +468,8 @@ function applyReportFilters(){
     const rk=PHONG_ORDER.map(p=>{const it=open.filter(t=>t.phong===p);return {p,qua:it.filter(t=>statusOf(t)==="qua").length,sap:it.filter(t=>statusOf(t)==="sap").length,open:it.length};})
       .filter(r=>r.open>0).sort((a,b)=>(b.qua-a.qua)||(b.sap-a.sap)||(b.open-a.open));
     if(rk.length>1){
-      rankHTML=`<h2 class="warn"><span class="bar"></span>Xếp hạng đôn đốc theo Phòng</h2>`+
-        `<div class="rhd"><div></div><div>Phòng</div><div class="m">Quá</div><div class="m">Sắp</div></div>`+
+      rankHTML=`<h2 class="warn"><span class="bar"></span>Thống kê nhiệm vụ quá hạn và sắp đến hạn</h2>`+
+        `<div class="rhd"><div></div><div></div><div class="m">Quá hạn</div><div class="m">Sắp đến hạn</div></div>`+
         rk.map((r,i)=>`<div class="rrow ${r.qua>0?'alert':(r.sap>0?'warn':'')}"><div class="rk">${i+1}</div><div class="pn">${PHONG_TEN[r.p]||r.p}</div><div class="m q">${r.qua||"–"}</div><div class="m s">${r.sap||"–"}</div></div>`).join("");
     }
   }
@@ -502,7 +503,8 @@ async function loadData(first){
     if(!tasks.length)throw new Error("Không có dữ liệu");
     TASKS=tasks;
     const now=new Date();
-    lastFresh="Cập nhật lúc "+now.toLocaleTimeString("vi-VN",{hour:"2-digit",minute:"2-digit"});
+    updTime=now.toLocaleTimeString("vi-VN",{hour:"2-digit",minute:"2-digit"});
+    lastFresh="Cập nhật lúc "+updTime;
     setHeader();
     if(REPORT){ renderReport(TASKS); return; }
     const keep=cur; slides=buildSlides(TASKS);
