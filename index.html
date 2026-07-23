@@ -74,9 +74,9 @@
   .rkhead .box .num{font-size:5.4vh;font-weight:800;line-height:1;margin-top:.4vh}
   .rkhead .box.qua .num{color:var(--qua-tx)} .rkhead .box.sap .num{color:var(--sap-tx)} .rkhead .box.nohan .num{color:#5b6472}
   .rktable{flex:1;display:flex;flex-direction:column;gap:.7vh}
-  .rkrow{display:grid;grid-template-columns:7vw 1fr 16vw 16vw;align-items:center;gap:1vw;padding:0 1.6vw;border-radius:1vh;background:var(--card);box-shadow:0 .3vh 1vh rgba(20,30,60,.06);flex:1}
-  .rkrow.head{background:var(--navy);color:#fff;flex:0 0 5.5vh;font-weight:700;font-size:1.9vh;box-shadow:none}
-  .rkrow.head .rank,.rkrow.head .pn,.rkrow.head .m{font-size:1.9vh;font-weight:700}
+  .rkrow{display:grid;grid-template-columns:7vw 1fr 16vw 16vw;align-items:center;align-content:center;gap:1vw;padding:0 1.6vw;border-radius:1vh;background:var(--card);box-shadow:0 .3vh 1vh rgba(20,30,60,.06);flex:1}
+  .rkrow.head{background:var(--navy);color:#fff;flex:0 0 5.5vh;font-weight:700;font-size:1.9vh;box-shadow:none;align-items:center;align-content:center;line-height:1}
+  .rkrow.head .rank,.rkrow.head .pn,.rkrow.head .m{font-size:1.9vh;font-weight:700;line-height:1;align-self:center}
   .rkrow .rank{font-size:2.8vh;font-weight:800;text-align:center;color:var(--navy)}
   .rkrow .pn{font-size:2.4vh;font-weight:700}
   .rkrow .m{text-align:center;font-size:2.6vh;font-weight:800}
@@ -333,12 +333,12 @@ function packByHeight(rowHTMLs){
 const EMPTYROW=`<div></div><div></div><div></div><div></div><div></div><div></div>`;
 function detailPages(tasks){
   const urgent=CONFIG.DETAIL_SCOPE==="urgent";
-  const TITLE=urgent?"NHIỆM VỤ QUAN TRỌNG & CẦN ĐÔN ĐỐC":"DANH MỤC NHIỆM VỤ CHI TIẾT";
+  const TITLE=urgent?"NHIỆM VỤ TRỌNG TÂM & CẦN ĐÔN ĐỐC":"DANH MỤC NHIỆM VỤ CHI TIẾT";
   let pool=tasks.filter(t=>statusOf(t)!=="done"&&!isSecret(t.domat)&&!CONFIG.HIDE_NGUON_DETAIL.includes(t.nguon));
   if(urgent)pool=pool.filter(t=>{const st=statusOf(t);return st==="qua"||st==="sap"||tierOf(t)==="cao";});
   pool.sort((a,b)=>(STORDER[statusOf(a)]-STORDER[statusOf(b)])||(TIER_RANK[tierOf(a)]-TIER_RANK[tierOf(b)])||((daysLeft(a)??9999)-(daysLeft(b)??9999)));
   if(!pool.length){
-    const msg=urgent?"Không có nhiệm vụ quan trọng, quá hạn hoặc sắp đến hạn cần đôn đốc.":"Chưa có nhiệm vụ nào.";
+    const msg=urgent?"Không có nhiệm vụ trọng tâm, quá hạn hoặc sắp đến hạn cần đôn đốc.":"Chưa có nhiệm vụ nào.";
     return [{title:TITLE,cls:urgent?"warn":"",rt:"",html:`<div class="dtable">${DHEAD}<div class="drow"><div></div><div class="c ten" style="color:var(--muted);font-weight:400">${msg}</div><div></div><div></div><div></div><div></div><div></div></div></div>`}];
   }
   const htmls=pool.map((t,i)=>detailRowHTML(t,i+1));
@@ -369,7 +369,7 @@ function rankingHTML(list){
   const rows=PHONG_ORDER.map(p=>{const it=open.filter(t=>t.phong===p);
     return {p,qua:it.filter(t=>statusOf(t)==="qua").length,sap:it.filter(t=>statusOf(t)==="sap").length,open:it.length};})
     .filter(r=>r.open>0).sort((a,b)=>(b.qua-a.qua)||(b.sap-a.sap)||(b.open-a.open));
-  const head=`<div class="rkrow head"><div class="rank" style="color:#fff">STT</div><div class="pn">Phòng</div><div class="m">Quá hạn</div><div class="m">Sắp đến hạn</div></div>`;
+  const head=`<div class="rkrow head"><div class="rank" style="color:#fff">TT</div><div class="pn">Phòng</div><div class="m">Quá hạn</div><div class="m">Sắp đến hạn</div></div>`;
   const body=rows.map((r,i)=>{const cls=r.qua>0?"alert":(r.sap>0?"warn":"");
     return `<div class="rkrow ${cls}"><div class="rank">${i+1}</div><div class="pn">${PHONG_TEN[r.p]||r.p}</div><div class="m q">${r.qua||"–"}</div><div class="m s">${r.sap||"–"}</div></div>`;}).join("");
   const nudge=totNoHan>0?`<div class="legend" style="margin-top:1.1vh;color:var(--qua-tx);font-weight:700">⚠ ${totNoHan} nhiệm vụ chưa khai báo thời hạn — đề nghị các Phòng bổ sung để theo dõi đúng tiến độ.</div>`:"";
@@ -381,7 +381,7 @@ function buildSlides(allTasks){
   const nTW=hi.filter(t=>t.nguon==="TW").length,nQH=hi.filter(t=>t.nguon==="QH").length,nTTg=hi.filter(t=>t.nguon==="TTg").length,nCP=hi.filter(t=>t.nguon==="CP").length;
   const s=[];
   s.push({title:"TỔNG QUAN CHUNG",cls:"",body:`${kpiHTML(tasks)}<div class="panel"><h3>Tình hình thực hiện theo từng Phòng</h3><div class="bwrap">${barsHTML(tasks)}</div><div class="legend">${LEGEND}</div></div>`});
-  s.push({title:"NHIỆM VỤ QUAN TRỌNG",cls:"prio",body:`<div class="prio-line"><span>Trung ương: ${nTW}</span><span>Quốc hội: ${nQH}</span><span>Thủ tướng Chính phủ: ${nTTg}</span><span>Chính phủ: ${nCP}</span></div>${kpiHTML(hi)}<div class="panel"><h3>Nhiệm vụ ưu tiên cao theo từng Phòng</h3><div class="bwrap">${barsHTML(hi)}</div><div class="legend">${LEGEND}</div></div>`});
+  s.push({title:"NHIỆM VỤ TRỌNG TÂM",cls:"prio",body:`<div class="prio-line"><span>Trung ương: ${nTW}</span><span>Quốc hội: ${nQH}</span><span>Thủ tướng Chính phủ: ${nTTg}</span><span>Chính phủ: ${nCP}</span></div>${kpiHTML(hi)}<div class="panel"><h3>Nhiệm vụ ưu tiên cao theo từng Phòng</h3><div class="bwrap">${barsHTML(hi)}</div><div class="legend">${LEGEND}</div></div>`});
   if(CONFIG.SHOW_RANKING)s.push({title:"THỐNG KÊ NHIỆM VỤ ĐẾN HẠN VÀ SẮP ĐẾN HẠN",cls:"warn",body:rankingHTML(tasks)});
   detailPages(tasks).forEach(p=>s.push({title:p.title,cls:p.cls||"",rt:p.rt,body:p.html}));
   return s;
@@ -486,7 +486,7 @@ function applyReportFilters(){
   const extra=Math.max(0,pool.length-RF_CAP);
   const cards=pool.length?pool.slice(0,RF_CAP).map(reportTaskCard).join("")+(extra>0?`<div class="note">… và ${extra} nhiệm vụ khác (thu hẹp bộ lọc để xem tiếp).</div>`:""):`<div class="empty">Không có nhiệm vụ phù hợp bộ lọc.</div>`;
   const searching=RF.q.trim().length>0;   // đang tìm kiếm thì hiện thẳng kết quả, ẩn phần tóm tắt
-  document.getElementById("rpBody").innerHTML=(searching?"":kpi+rankHTML)+`<h2 class="warn"><span class="bar"></span>Danh sách nhiệm vụ</h2><div class="cnt">${pool.length} nhiệm vụ · ${lastFresh}</div>${cards}`;
+  document.getElementById("rpBody").innerHTML=(searching?"":kpi+rankHTML)+`<h2 class="warn"><span class="bar"></span>Danh sách nhiệm vụ</h2>${cards}`;
 }
 function renderReport(){ if(!reportShell){buildReportShell();reportShell=true;} applyReportFilters(); }
 
